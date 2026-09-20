@@ -154,7 +154,96 @@ async function removeRecord(record) {
     }
 }
 
+// ---------- быстрая загрузка перетаскиванием ----------
+
+// Новых эндпоинтов не появляется: один жест клиента складывается из двух уже
+// существующих вызовов — создания записи и загрузки её содержимого.
+async function createFromFile(file) {
+    const created = await fetchWithTimeout(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, description: '', is_public: false }),
+    });
+    if (!created.ok) throw new Error(await readServerError(created));
+    const record = await created.json();
+
+    const form = new FormData();
+    form.append('file', file);
+    const uploaded = await fetchWithTimeout(
+        `${API}/${record.id}/content`, { method: 'PUT', body: form }, UPLOAD_TIMEOUT,
+    );
+    // Запись уже создана: если содержимое не дошло, она останется без файла,
+    // и его можно догрузить на странице записи.
+    if (!uploaded.ok) throw new Error(await readServerError(uploaded));
+}
+
+function showProgress(done, total, name) {
+    const box = document.getElementById('progressContainer');
+    box.style.display = 'block';
+    document.getElementById('progressFill').style.width = `${Math.round((done / total) * 100)}%`;
+    document.getElementById('progressText').textContent =
+        done < total ? `Загрузка ${done + 1} из ${total}: ${name}` : `Готово: ${total}`;
+}
+
+async function handleFiles(fileList) {
+    const files = Array.from(fileList);
+    if (!files.length) return;
+
+    const failures = [];
+    for (let i = 0; i < files.length; i += 1) {
+        showProgress(i, files.length, files[i].name);
+        try {
+            await createFromFile(files[i]);
+        } catch (error) {
+            failures.push(`${files[i].name} — ${error.message}`);
+        }
+    }
+    showProgress(files.length, files.length);
+    setTimeout(() => { document.getElementById('progressContainer').style.display = 'none'; }, 1200);
+
+    await loadFiles();
+    if (failures.length) {
+        showMessage(`Не удалось загрузить: ${failures.join('; ')}`);
+    } else {
+        showMessage(`Загружено файлов: ${files.length}`, 'success');
+    }
+}
+
+function bindDropZone() {
+    const zone = document.getElementById('dropZone');
+    const input = document.getElementById('fileInput');
+
+    ['dragenter', 'dragover'].forEach((type) => {
+        zone.addEventListener(type, (event) => {
+            event.preventDefault();
+            zone.classList.add('drag-over');
+        });
+    });
+    ['dragleave', 'drop'].forEach((type) => {
+        zone.addEventListener(type, (event) => {
+            event.preventDefault();
+            zone.classList.remove('drag-over');
+        });
+    });
+
+    zone.addEventListener('drop', (event) => handleFiles(event.dataTransfer.files));
+    zone.addEventListener('click', () => input.click());
+    input.addEventListener('change', (event) => {
+        handleFiles(event.target.files);
+        event.target.value = '';
+    });
+
+    // Файл, брошенный мимо зоны, не должен открываться в соседней вкладке
+    ['dragover', 'drop'].forEach((type) => {
+        window.addEventListener(type, (event) => {
+            if (!zone.contains(event.target)) event.preventDefault();
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    bindDropZone();
+
     document.getElementById('refreshBtn').addEventListener('click', loadFiles);
     document.getElementById('createBtn').addEventListener('click', openForm);
     document.getElementById('cancelForm').addEventListener('click', closeForm);

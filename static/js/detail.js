@@ -27,7 +27,6 @@ function render() {
 
     fillForm();
 
-    document.getElementById('infoId').textContent = record.id;
     document.getElementById('infoSize').textContent =
         record.has_content ? formatSize(record.size_bytes) : '—';
     document.getElementById('infoType').textContent = record.content_type || '—';
