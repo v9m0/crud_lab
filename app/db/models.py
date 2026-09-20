@@ -1,11 +1,15 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import BigInteger, Boolean, DateTime, String, Text, func, text
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
+
+
+def _utcnow() -> datetime:
+    return datetime.now(UTC)
 
 
 class FileRecord(Base):
@@ -32,11 +36,20 @@ class FileRecord(Base):
     storage_key: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, server_default=func.now(), index=True
+        DateTime(timezone=True),
+        nullable=False,
+        default=_utcnow,
+        server_default=func.now(),
+        index=True,
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
+        default=_utcnow,
+        onupdate=_utcnow,
         server_default=func.now(),
-        onupdate=func.now(),
     )
+
+    @property
+    def has_content(self) -> bool:
+        return self.storage_key is not None
