@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app.api.errors import register_exception_handlers
 from app.api.routers import front
 from app.core.config import STATIC_DIR, get_settings
 
@@ -34,6 +35,8 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    register_exception_handlers(app)
 
     app.include_router(front.router)
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
