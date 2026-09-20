@@ -979,3 +979,74 @@ textarea.form-input { resize: vertical; font-family: inherit; }
 /* body — колоночный флекс, а auto-поля у флекс-элемента схлопывают его
    по содержимому. Явная ширина возвращает предсказуемый размер. */
 .container { width: 100%; }
+
+/* ---- Кликабельные строки списка ---- */
+.clickable-row { cursor: pointer; transition: background 0.15s; }
+.clickable-row:hover { background: rgba(255, 255, 255, 0.07); }
+.actions-cell { cursor: default; }
+
+.row-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    opacity: 0.55;
+}
+
+/* ---- Страница записи ---- */
+.detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.detail-card {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.detail-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.8;
+    margin: 0 0 16px;
+}
+.detail-card-title:not(:first-child) { margin-top: 28px; }
+
+.detail-card .form-group { margin-bottom: 18px; }
+
+.detail-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 16px;
+    margin: 0;
+    font-size: 14px;
+}
+.detail-list dt { opacity: 0.6; }
+.detail-list dd { margin: 0; word-break: break-all; }
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+
+.detail-actions,
+.detail-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.detail-actions { margin-top: 8px; }
+
+.modal-btn-danger {
+    background: rgba(220, 70, 70, 0.22);
+    border: 2px solid rgba(220, 70, 70, 0.7);
+    color: #ffd6d6;
+}
+.modal-btn-danger:hover { background: rgba(220, 70, 70, 0.35); }
+
+.modal-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+#notFound .modal-btn { margin-top: 16px; }
+
+@media (max-width: 860px) {
+    .detail-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись — каталог файлов</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Запись о файле</h1>
+            <p>Подробная информация и редактирование</p>
+        </div>
+
+        <div class="content-section">
+            <div class="content-header">
+                <div class="directory-title">
+                    <button class="back-btn" id="backBtn" title="К списку">
+                        <img src="/static/icons/arrow-left-to-line.svg" class="icon-svg" alt="Назад">
+                    </button>
+                    <h2 class="directory-name" id="recordTitle">Загрузка...</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="refresh-btn" id="refreshBtn" title="Обновить">
+                        <img src="/static/icons/reload.svg" class="icon-svg" alt="Обновить">
+                    </button>
+                </div>
+            </div>
+
+            <div class="files-message" id="message"></div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Загрузка записи...</p>
+            </div>
+
+            <div id="detailContent" style="display: none;">
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3 class="detail-card-title">Редактируемые поля</h3>
+
+                        <div class="form-group">
+                            <label class="form-label" for="fieldFilename">Имя файла</label>
+                            <input type="text" class="form-input" id="fieldFilename" maxlength="255">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="fieldDescription">Описание</label>
+                            <textarea class="form-input" id="fieldDescription" rows="5"
+                                      maxlength="1000" placeholder="Описание пока не задано"></textarea>
+                        </div>
+
+                        <div class="form-group form-group-inline">
+                            <input type="checkbox" id="fieldIsPublic">
+                            <label class="form-label" for="fieldIsPublic">Публичная запись</label>
+                        </div>
+
+                        <div class="error-message" id="formError"></div>
+
+                        <div class="detail-actions">
+                            <button class="modal-btn modal-btn-secondary" id="resetBtn">Сбросить</button>
+                            <button class="modal-btn modal-btn-primary" id="saveBtn">Сохранить</button>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3 class="detail-card-title">Сведения</h3>
+                        <dl class="detail-list">
+                            <dt>Идентификатор</dt><dd class="mono" id="infoId">—</dd>
+                            <dt>Размер</dt><dd id="infoSize">—</dd>
+                            <dt>Тип содержимого</dt><dd id="infoType">—</dd>
+                            <dt>Файл загружен</dt><dd id="infoHasContent">—</dd>
+                            <dt>Создана</dt><dd id="infoCreated">—</dd>
+                            <dt>Изменена</dt><dd id="infoUpdated">—</dd>
+                        </dl>
+
+                        <h3 class="detail-card-title">Содержимое</h3>
+                        <div class="detail-buttons">
+                            <button class="modal-btn modal-btn-secondary" id="uploadBtn">Загрузить файл</button>
+                            <button class="modal-btn modal-btn-secondary" id="downloadBtn">Скачать</button>
+                            <button class="modal-btn modal-btn-secondary" id="linkBtn">Скопировать ссылку</button>
+                        </div>
+
+                        <h3 class="detail-card-title">Опасная зона</h3>
+                        <button class="modal-btn modal-btn-danger" id="deleteBtn">Удалить запись</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-state" id="notFound" style="display: none;">
+                <p>Запись не найдена. Возможно, она была удалена.</p>
+                <button class="modal-btn modal-btn-primary" id="backToListBtn">К списку</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="contentInput" class="file-input" hidden>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/detail.js"></script>
+</body>
+</html>

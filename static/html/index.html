@@ -47,7 +47,6 @@
                     <thead>
                         <tr>
                             <th>Имя файла</th>
-                            <th>Описание</th>
                             <th>Размер</th>
                             <th>Доступ</th>
                             <th>Создано</th>
@@ -66,13 +65,10 @@
         </div>
     </div>
 
-    <!-- Скрытый input для загрузки содержимого к конкретной записи -->
-    <input type="file" id="contentInput" class="file-input" hidden>
-
     <div class="modal" id="formModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="formModalTitle">Добавить запись</h3>
+                <h3 class="modal-title">Добавить запись</h3>
                 <button class="close-btn" id="closeFormModal">&times;</button>
             </div>
             <div class="modal-form">
@@ -99,17 +95,7 @@
         </div>
     </div>
 
-    <div class="modal" id="shareModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Ссылка для скачивания</h3>
-                <button class="close-btn" id="closeShareModal">&times;</button>
-            </div>
-            <input type="text" class="share-link" id="shareLink" readonly>
-            <button class="copy-btn" id="copyLinkBtn">Копировать ссылку</button>
-        </div>
-    </div>
-
+    <script src="/static/js/common.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 </html>
