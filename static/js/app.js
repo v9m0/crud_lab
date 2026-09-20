@@ -1,6 +1,7 @@
 // Список записей. Утилиты — в common.js.
 
 let records = [];
+let pendingFile = null;   // файл, выбранный в форме добавления
 
 // Описание может быть длинным, а всплывающая подсказка на несколько тысяч
 // символов бесполезна — обрезаем её, полный текст виден на странице записи.
@@ -80,11 +81,26 @@ function renderTable(data) {
 
 // ---------- создание ----------
 
+function setPendingFile(file) {
+    pendingFile = file;
+    document.getElementById('formDropZone').style.display = file ? 'none' : 'block';
+    document.getElementById('pickedFile').style.display = file ? 'flex' : 'none';
+    if (file) {
+        document.getElementById('pickedFileName').textContent =
+            `${file.name} · ${formatSize(file.size)}`;
+        // имя записи подставляем из файла, но не затираем введённое вручную
+        const nameField = document.getElementById('fieldFilename');
+        if (!nameField.value.trim()) nameField.value = file.name;
+    }
+}
+
 function openForm() {
     document.getElementById('fieldFilename').value = '';
     document.getElementById('fieldDescription').value = '';
     document.getElementById('fieldIsPublic').checked = false;
     document.getElementById('formError').style.display = 'none';
+    setPendingFile(null);
+    document.getElementById('formFileInput').value = '';
     document.getElementById('formModal').style.display = 'flex';
     document.getElementById('fieldFilename').focus();
 }
@@ -112,9 +128,26 @@ async function submitForm() {
         });
         if (!response.ok) throw new Error(await readServerError(response));
 
+        // Файл догружаем вторым запросом — тем же, что и при перетаскивании
+        if (pendingFile) {
+            const record = await response.json();
+            const form = new FormData();
+            form.append('file', pendingFile);
+            const uploaded = await fetchWithTimeout(
+                `${API}/${record.id}/content`, { method: 'PUT', body: form }, UPLOAD_TIMEOUT,
+            );
+            if (!uploaded.ok) {
+                // запись уже создана, поэтому форму закрываем и сообщаем о частичной неудаче
+                closeForm();
+                await loadFiles();
+                showMessage(`Запись создана, но файл не загрузился: ${await readServerError(uploaded)}`);
+                return;
+            }
+        }
+
         closeForm();
         await loadFiles();
-        showMessage('Запись создана', 'success');
+        showMessage(pendingFile ? 'Запись создана, файл загружен' : 'Запись создана', 'success');
     } catch (error) {
         const box = document.getElementById('formError');
         box.textContent = error.message;
@@ -212,6 +245,46 @@ async function handleFiles(fileList) {
     }
 }
 
+function bindFormDropZone() {
+    const zone = document.getElementById('formDropZone');
+    const input = document.getElementById('formFileInput');
+
+    ['dragenter', 'dragover'].forEach((type) => {
+        zone.addEventListener(type, (event) => {
+            event.preventDefault();
+            zone.classList.add('drag-over');
+        });
+    });
+    ['dragleave', 'drop'].forEach((type) => {
+        zone.addEventListener(type, (event) => {
+            event.preventDefault();
+            zone.classList.remove('drag-over');
+        });
+    });
+
+    zone.addEventListener('drop', (event) => {
+        const [file] = event.dataTransfer.files;
+        if (file) setPendingFile(file);
+    });
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            input.click();
+        }
+    });
+
+    input.addEventListener('change', (event) => {
+        const [file] = event.target.files;
+        if (file) setPendingFile(file);
+    });
+
+    document.getElementById('clearPickedFile').addEventListener('click', () => {
+        input.value = '';
+        setPendingFile(null);
+    });
+}
+
 function bindDropZone() {
     const zone = document.getElementById('dropZone');
     const input = document.getElementById('fileInput');
@@ -252,6 +325,7 @@ function bindDropZone() {
 
 document.addEventListener('DOMContentLoaded', () => {
     bindDropZone();
+    bindFormDropZone();
 
     document.getElementById('refreshBtn').addEventListener('click', loadFiles);
     document.getElementById('createBtn').addEventListener('click', openForm);

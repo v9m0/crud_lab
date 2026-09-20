@@ -615,3 +615,44 @@ input[type="checkbox"] {
     .header-actions .toolbar-search { flex: 1 1 100%; width: auto; }
     .header-actions .toolbar-filter { flex: 1 1 140px; width: auto; }
 }
+
+/* ---- Компактная зона выбора файла внутри формы ---- */
+.drop-zone-compact {
+    /* внутри формы зона стоит в ряду полей, поэтому радиус как у них */
+    border-radius: var(--r-control);
+    padding: 14px 16px;
+}
+.drop-zone-compact .drop-zone-text { font-size: 13px; }
+.drop-zone-compact .drop-zone-hint { margin-top: 2px; }
+
+.picked-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 8px 8px 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--control);
+    border-radius: var(--r-control);
+    font-size: 13px;
+}
+
+.picked-file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.picked-file-clear {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    border-radius: var(--r-control);
+    color: var(--text-dim);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+.picked-file-clear:hover { background: var(--surface-hover); color: var(--text); }

@@ -93,6 +93,25 @@
                            placeholder="например, отчёт.pdf">
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Файл</label>
+
+                    <div class="drop-zone drop-zone-compact" id="formDropZone"
+                         role="button" tabindex="0"
+                         aria-label="Перетащите файл сюда или нажмите для выбора">
+                        <div class="drop-zone-text">Перетащите файл сюда</div>
+                        <div class="drop-zone-hint">или нажмите для выбора</div>
+                    </div>
+
+                    <div class="picked-file" id="pickedFile" style="display: none;">
+                        <span class="picked-file-name" id="pickedFileName"></span>
+                        <button type="button" class="picked-file-clear" id="clearPickedFile"
+                                title="Убрать файл" aria-label="Убрать файл">&times;</button>
+                    </div>
+
+                    <input type="file" id="formFileInput" class="file-input">
+                </div>
+
+                <div class="form-group">
                     <label class="form-label" for="fieldDescription">Описание</label>
                     <textarea class="form-input" id="fieldDescription" rows="3" maxlength="5000"
                               placeholder="Необязательное описание"></textarea>
