@@ -28,5 +28,8 @@ async def wait_for_db() -> None:
 asyncio.run(wait_for_db())
 PY
 
+echo "Применение миграций..."
+alembic upgrade head
+
 echo "Запуск приложения..."
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000
