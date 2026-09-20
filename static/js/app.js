@@ -228,6 +228,12 @@ function bindDropZone() {
 
     zone.addEventListener('drop', (event) => handleFiles(event.dataTransfer.files));
     zone.addEventListener('click', () => input.click());
+    zone.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            input.click();
+        }
+    });
     input.addEventListener('change', (event) => {
         handleFiles(event.target.files);
         event.target.value = '';
@@ -275,6 +281,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('click', (event) => {
         if (event.target.classList.contains('modal')) event.target.style.display = 'none';
+    });
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeForm();
     });
 
     loadFiles();

@@ -59,7 +59,7 @@ function showMessage(text, kind = 'error') {
     const box = document.getElementById(MESSAGE_BOX);
     if (!box) return;
     box.textContent = text;
-    box.className = `files-message ${kind}`;
+    box.className = `notice ${kind}`;
     box.style.display = text ? 'block' : 'none';
     if (text && kind === 'success') {
         setTimeout(() => { box.style.display = 'none'; }, 4000);

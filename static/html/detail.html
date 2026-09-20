@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Запись — каталог файлов</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230B0C0F'/><path d='M10 7h7l6 6v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z' fill='none' stroke='%233DDC97' stroke-width='2' stroke-linejoin='round'/></svg>">
     <link rel="stylesheet" href="/static/css/app.css">
 </head>
 <body>
@@ -15,20 +16,20 @@
 
         <div class="content-section">
             <div class="content-header">
-                <div class="directory-title">
-                    <button class="back-btn" id="backBtn" title="К списку">
+                <div class="section-heading">
+                    <button class="icon-btn" id="backBtn" title="К списку">
                         <img src="/static/icons/arrow-left-to-line.svg" class="icon-svg" alt="Назад">
                     </button>
-                    <h2 class="directory-name" id="recordTitle">Загрузка...</h2>
+                    <h2 class="record-title" id="recordTitle">Загрузка...</h2>
                 </div>
                 <div class="header-actions">
-                    <button class="refresh-btn" id="refreshBtn" title="Обновить">
+                    <button class="icon-btn" id="refreshBtn" title="Обновить">
                         <img src="/static/icons/reload.svg" class="icon-svg" alt="Обновить">
                     </button>
                 </div>
             </div>
 
-            <div class="files-message" id="message"></div>
+            <div class="notice" id="message"></div>
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>

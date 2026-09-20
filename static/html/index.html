@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог файлов</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230B0C0F'/><path d='M10 7h7l6 6v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z' fill='none' stroke='%233DDC97' stroke-width='2' stroke-linejoin='round'/></svg>">
     <link rel="stylesheet" href="/static/css/app.css">
 </head>
 <body>
@@ -16,7 +17,8 @@
         <div class="upload-section">
             <h2>Быстрая загрузка</h2>
 
-            <div class="drop-zone" id="dropZone">
+            <div class="drop-zone" id="dropZone" role="button" tabindex="0"
+                 aria-label="Перетащите файлы сюда или нажмите для выбора">
                 <div class="drop-zone-content">
                     <div class="drop-zone-icon">
                         <img src="/static/icons/upload.svg" class="icon-svg" alt="">
@@ -40,27 +42,28 @@
 
         <div class="content-section">
             <div class="content-header">
-                <div class="directory-title">
-                    <h2 class="directory-name">Записи</h2>
+                <div class="section-heading">
+                    <h2 class="section-title">Записи</h2>
                 </div>
                 <div class="header-actions">
                     <input type="search" class="form-input toolbar-search" id="searchInput"
+                           aria-label="Поиск по имени и описанию"
                            placeholder="Поиск по имени и описанию">
                     <select class="form-input toolbar-filter" id="publicFilter" aria-label="Фильтр по публичности">
                         <option value="">Все</option>
                         <option value="true">Только публичные</option>
                         <option value="false">Только приватные</option>
                     </select>
-                    <button class="refresh-btn" id="refreshBtn" title="Обновить список">
+                    <button class="icon-btn" id="refreshBtn" title="Обновить список">
                         <img src="/static/icons/reload.svg" class="icon-svg" alt="Обновить">
                     </button>
-                    <button class="create-folder-btn" id="createBtn" title="Добавить запись">
+                    <button class="icon-btn icon-btn-accent" id="createBtn" title="Добавить запись">
                         <img src="/static/icons/folder-plus.svg" class="icon-svg" alt="Добавить">
                     </button>
                 </div>
             </div>
 
-            <div class="files-message" id="filesMessage"></div>
+            <div class="notice" id="filesMessage"></div>
 
             <div class="loading" id="loadingFiles">
                 <div class="spinner"></div>
