@@ -35,6 +35,7 @@
        Тогда углы вложенных прямоугольников концентричны. */
     --border-w:   1px;  /* толщина рамки карточек */
     --nest-gap:  14px;  /* padding внешней карточки до вложенной */
+    --r-section: 14px;  /* секции верхнего уровня и модальное окно */
     --r-inner:   10px;  /* вложенные карточки и зона загрузки */
     --r-control:  6px;  /* поля ввода и кнопки */
 
@@ -91,14 +92,14 @@ body {
 .content-section {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-outer);
-    padding: var(--nest-gap);
-    margin-bottom: 16px;
+    border-radius: var(--r-section);
+    padding: 24px;
+    margin-bottom: 20px;
 }
 
 /* Загрузка — вспомогательное действие, поэтому карточка компактнее,
    чтобы таблица не уходила под сгиб. */
-.upload-section { padding: var(--nest-gap); }
+.upload-section { padding: 18px 20px; }
 
 /* Единый стиль надзаголовка: секции, шапка таблицы, карточки записи */
 .upload-section h2,
@@ -505,7 +506,7 @@ input[type="checkbox"] {
     max-width: 460px;
     background: var(--surface);
     border: 1px solid var(--border-strong);
-    border-radius: var(--r-outer);
+    border-radius: var(--r-section);
     padding: 24px;
 }
 
@@ -566,6 +567,13 @@ input[type="checkbox"] {
 
 /* Кнопка навигации стоит в углу карточки, над её заголовком */
 .detail-card > .icon-btn { margin-bottom: 14px; }
+
+/* Оболочка вокруг вложенных карточек: только здесь действует правило
+   вложенности, поэтому и зазор, и радиус заданы формулой. */
+.nesting-shell {
+    padding: var(--nest-gap);
+    border-radius: var(--r-outer);
+}
 
 .detail-list {
     display: grid;
