@@ -19,9 +19,7 @@
                         <img src="/static/icons/upload.svg" class="icon-svg" alt="">
                     </div>
                     <div class="drop-zone-text">Перетащите файлы сюда</div>
-                    <div class="drop-zone-hint">
-                        или нажмите для выбора — записи создадутся автоматически
-                    </div>
+                    <div class="drop-zone-hint">или нажмите для выбора</div>
                 </div>
             </div>
 
@@ -37,13 +35,9 @@
 
         <div class="content-section">
             <div class="content-header">
-                <div class="section-heading">
-                    <h2 class="section-title">Записи</h2>
-                </div>
                 <div class="header-actions">
                     <input type="search" class="form-input toolbar-search" id="searchInput"
-                           aria-label="Поиск по имени и описанию"
-                           placeholder="Поиск по имени и описанию">
+                           aria-label="Поиск по имени и описанию">
                     <select class="form-input toolbar-filter" id="publicFilter" aria-label="Фильтр по публичности">
                         <option value="">Все</option>
                         <option value="true">Только публичные</option>
@@ -82,8 +76,6 @@
                 <div class="empty-state" id="emptyState" style="display: none;">
                     <p>Записей пока нет. Нажмите «Добавить запись», чтобы создать первую.</p>
                 </div>
-
-                <div class="table-footer" id="tableFooter"></div>
             </div>
         </div>
     </div>

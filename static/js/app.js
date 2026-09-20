@@ -36,14 +36,9 @@ async function loadFiles() {
 function renderTable(data) {
     const tbody = document.getElementById('filesList');
     const empty = document.getElementById('emptyState');
-    const footer = document.getElementById('tableFooter');
 
     tbody.innerHTML = '';
     empty.style.display = data.items.length ? 'none' : 'block';
-    footer.textContent = data.items.length
-        ? `Показано записей: ${data.items.length} из ${data.total}`
-        : '';
-
     for (const item of data.items) {
         const row = document.createElement('tr');
         row.className = 'clickable-row';
@@ -53,7 +48,7 @@ function renderTable(data) {
             <td class="file-name-cell">
                 <span class="file-name-text">${escapeHtml(item.filename)}</span>
                 ${item.description
-                    ? `<span class="row-hint">${escapeHtml(item.description.slice(0, 60))}${item.description.length > 60 ? '…' : ''}</span>`
+                    ? `<span class="row-hint" title="${escapeHtml(item.description)}">${escapeHtml(item.description)}</span>`
                     : ''}
             </td>
             <td>${item.has_content ? formatSize(item.size_bytes) : '<span class="muted">нет файла</span>'}</td>
