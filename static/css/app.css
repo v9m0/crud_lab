@@ -38,12 +38,9 @@
     --r-inner:   10px;  /* вложенные карточки и зона загрузки */
     --r-control:  6px;  /* поля ввода и кнопки */
 
-    --zone-gap:   6px;  /* отступ секции загрузки до зоны перетаскивания */
-
     /* Радиус скруглён по внешнему краю рамки, поэтому в зазор входит
        и сама рамка: иначе углы расходятся на её толщину. */
     --r-outer: calc(var(--r-inner) + var(--nest-gap) + var(--border-w));
-    --r-zone:  calc(var(--r-inner) - var(--zone-gap) - var(--border-w));
 
     /* шрифты: системные, чтобы приложение не зависело от сети */
     --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto,
@@ -94,18 +91,14 @@ body {
 .content-section {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-inner);
+    border-radius: var(--r-outer);
     padding: var(--nest-gap);
     margin-bottom: 16px;
 }
 
-/* Зазор у секции загрузки меньше общего: так зоне внутри остаётся
-   собственное скругление, а правило вложенности сохраняется. */
-.upload-section { padding: var(--zone-gap); }
-
-/* Оболочка вокруг вложенных карточек: только здесь радиус увеличен,
-   чтобы её углы были концентричны углам вложенных. */
-.nesting-shell { border-radius: var(--r-outer); }
+/* Загрузка — вспомогательное действие, поэтому карточка компактнее,
+   чтобы таблица не уходила под сгиб. */
+.upload-section { padding: var(--nest-gap); }
 
 /* Единый стиль надзаголовка: секции, шапка таблицы, карточки записи */
 .upload-section h2,
@@ -125,7 +118,7 @@ body {
 
 .drop-zone {
     border: 1px dashed var(--control);
-    border-radius: var(--r-zone);
+    border-radius: var(--r-inner);
     padding: 22px 20px;
     text-align: center;
     cursor: pointer;
@@ -512,7 +505,7 @@ input[type="checkbox"] {
     max-width: 460px;
     background: var(--surface);
     border: 1px solid var(--border-strong);
-    border-radius: var(--r-inner);
+    border-radius: var(--r-outer);
     padding: 24px;
 }
 
