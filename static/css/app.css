@@ -567,6 +567,11 @@ input[type="checkbox"] {
 
 .detail-buttons .modal-btn { flex: 1 1 auto; }
 
+/* Подписей у групп больше нет, поэтому их разделяет расстояние:
+   между сведениями и действиями, и заметно больше — перед удалением. */
+.detail-buttons { margin-top: 22px; }
+.detail-card .modal-btn-danger { margin-top: 32px; }
+
 #notFound .modal-btn { margin-top: 18px; }
 
 /* ---------- адаптив ---------- */
