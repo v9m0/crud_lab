@@ -1,0 +1,22 @@
+FROM python:3.12-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+# Зависимости отдельным слоем: правка кода не инвалидирует кэш pip
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+RUN chmod +x /app/docker/entrypoint.sh \
+ && useradd --create-home --uid 1000 appuser \
+ && mkdir -p /data/storage \
+ && chown -R appuser:appuser /app /data
+
+USER appuser
+
+EXPOSE 8000
+ENTRYPOINT ["/app/docker/entrypoint.sh"]
