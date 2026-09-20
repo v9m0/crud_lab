@@ -3,72 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления</title>
-    <link rel="stylesheet" href="static/css/dashboard.css">
+    <title>Каталог файлов</title>
+    <link rel="stylesheet" href="/static/css/app.css">
 </head>
 <body>
     <div class="container">
         <div class="page-header">
-            <h1>Облачное хранилище</h1>
-            <p>Добро пожаловать, <span id="username">Пользователь</span>!</p>
-        </div>
-
-        <div class="upload-section">
-            <h2>Загрузить файлы</h2>
-
-            <div class="drop-zone" id="dropZone">
-                <div class="drop-zone-content">
-                    <div class="drop-zone-icon">
-                        <img src="/static/icons/upload.svg" class="icon-svg" alt="Загрузить">
-                    </div>
-                    <div class="drop-zone-text">Переместите файлы сюда</div>
-                    <div class="drop-zone-hint">или нажмите для выбора</div>
-                </div>
-            </div>
-
-            <input type="file" id="fileInput" class="file-input" multiple>
-
-            <div class="size-limits-info">
-                Ограничение: сумма загрузки ≤ 1.5 ГБ
-            </div>
-
-            <div class="total-size-info" id="totalSizeInfo" style="display: none;"></div>
-
-            <div class="selected-files" id="selectedFiles">
-                <div class="selected-files-header">
-                    <div class="selected-files-title">Выбранные файлы:</div>
-                    <button class="clear-all-btn" id="clearAllBtn">Очистить все</button>
-                </div>
-                <div class="selected-file-list" id="selectedFileList"></div>
-            </div>
-
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-text" id="progressText">Загрузка файлов...</div>
-            </div>
-
-            <button class="upload-btn" id="uploadBtn" disabled>Загрузить</button>
-
-            <div class="error-message" id="uploadError"></div>
-            <div class="success-message" id="uploadSuccess"></div>
+            <h1>Каталог файлов</h1>
+            <p>Записи о файлах: создание, просмотр, изменение и удаление</p>
         </div>
 
         <div class="content-section">
             <div class="content-header">
                 <div class="directory-title">
-                    <button class="back-btn" id="backBtn" disabled>
-                        <img src="/static/icons/arrow-left-to-line.svg" class="icon-svg" alt="Назад">
-                    </button>
-                    <h2 class="directory-name" id="directoryName">Home</h2>
+                    <h2 class="directory-name">Записи</h2>
                 </div>
                 <div class="header-actions">
-                    <button class="refresh-btn" id="refreshBtn" title="Обновить">
+                    <input type="search" class="form-input toolbar-search" id="searchInput"
+                           placeholder="Поиск по имени и описанию">
+                    <select class="form-input toolbar-filter" id="publicFilter" aria-label="Фильтр по публичности">
+                        <option value="">Все</option>
+                        <option value="true">Только публичные</option>
+                        <option value="false">Только приватные</option>
+                    </select>
+                    <button class="refresh-btn" id="refreshBtn" title="Обновить список">
                         <img src="/static/icons/reload.svg" class="icon-svg" alt="Обновить">
                     </button>
-                    <button class="create-folder-btn" id="createFolderBtn" title="Создать папку">
-                        <img src="/static/icons/folder-plus.svg" class="icon-svg" alt="Создать папку">
+                    <button class="create-folder-btn" id="createBtn" title="Добавить запись">
+                        <img src="/static/icons/folder-plus.svg" class="icon-svg" alt="Добавить">
                     </button>
                 </div>
             </div>
@@ -77,37 +39,62 @@
 
             <div class="loading" id="loadingFiles">
                 <div class="spinner"></div>
-                <p>Загрузка содержимого...</p>
-            </div>
-
-            <div id="foldersContent" style="display: none;">
-                <h3 style="margin-bottom: 15px; opacity: 0.8;">Папки</h3>
-                <div class="folders-grid" id="foldersList"></div>
+                <p>Загрузка списка...</p>
             </div>
 
             <div id="filesContent" style="display: none;">
-                <h3 style="margin-bottom: 15px; opacity: 0.8;">Файлы</h3>
                 <table class="files-table">
                     <thead>
                         <tr>
                             <th>Имя файла</th>
+                            <th>Описание</th>
                             <th>Размер</th>
-                            <th>Дата загрузки</th>
+                            <th>Доступ</th>
+                            <th>Создано</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody id="filesList"></tbody>
                 </table>
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <p>В этой папке пока нет файлов</p>
-                </div>
-            </div>
 
-            <div class="storage-footer">
-                <button class="icon-logout-btn" id="logoutBtn" title="Выйти из аккаунта">
-                    <img src="/static/icons/exit.svg" class="icon-svg" alt="Выйти">
-                </button>
-                <div class="storage-status" id="storageStatus">Загрузка статуса хранилища...</div>
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <p>Записей пока нет. Нажмите «Добавить запись», чтобы создать первую.</p>
+                </div>
+
+                <div class="table-footer" id="tableFooter"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрытый input для загрузки содержимого к конкретной записи -->
+    <input type="file" id="contentInput" class="file-input" hidden>
+
+    <div class="modal" id="formModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="formModalTitle">Добавить запись</h3>
+                <button class="close-btn" id="closeFormModal">&times;</button>
+            </div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label class="form-label" for="fieldFilename">Имя файла</label>
+                    <input type="text" class="form-input" id="fieldFilename" maxlength="255"
+                           placeholder="например, отчёт.pdf">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="fieldDescription">Описание</label>
+                    <textarea class="form-input" id="fieldDescription" rows="3" maxlength="1000"
+                              placeholder="Необязательное описание"></textarea>
+                </div>
+                <div class="form-group form-group-inline">
+                    <input type="checkbox" id="fieldIsPublic">
+                    <label class="form-label" for="fieldIsPublic">Публичная запись</label>
+                </div>
+                <div class="error-message" id="formError"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-secondary" id="cancelForm">Отмена</button>
+                <button class="modal-btn modal-btn-primary" id="submitForm">Сохранить</button>
             </div>
         </div>
     </div>
@@ -123,44 +110,6 @@
         </div>
     </div>
 
-    <div class="modal" id="createFolderModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Создать новую папку</h3>
-                <button class="close-btn" id="closeCreateFolderModal">&times;</button>
-            </div>
-            <div class="modal-form">
-                <div class="form-group">
-                    <label class="form-label" for="folderName">Название папки</label>
-                    <input type="text" class="form-input" id="folderName" placeholder="Введите название папки">
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-secondary" id="cancelCreateFolder">Отмена</button>
-                <button class="modal-btn modal-btn-primary" id="confirmCreateFolder">Создать</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="renameFolderModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Переименовать папку</h3>
-                <button class="close-btn" id="closeRenameFolderModal">&times;</button>
-            </div>
-            <div class="modal-form">
-                <div class="form-group">
-                    <label class="form-label" for="newFolderName">Новое название</label>
-                    <input type="text" class="form-input" id="newFolderName" placeholder="Введите новое название">
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-secondary" id="cancelRenameFolder">Отмена</button>
-                <button class="modal-btn modal-btn-primary" id="confirmRenameFolder">Переименовать</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="static/js/dashboard.js"></script>
+    <script src="/static/js/app.js"></script>
 </body>
 </html>
