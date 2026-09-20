@@ -91,7 +91,7 @@ body {
 .content-section {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--r-outer);
+    border-radius: var(--r-inner);
     padding: var(--nest-gap);
     margin-bottom: 16px;
 }
@@ -99,6 +99,10 @@ body {
 /* Загрузка — вспомогательное действие, поэтому карточка компактнее,
    чтобы таблица не уходила под сгиб. */
 .upload-section { padding: var(--nest-gap); }
+
+/* Оболочка вокруг вложенных карточек: только здесь радиус увеличен,
+   чтобы её углы были концентричны углам вложенных. */
+.nesting-shell { border-radius: var(--r-outer); }
 
 /* Единый стиль надзаголовка: секции, шапка таблицы, карточки записи */
 .upload-section h2,
@@ -118,7 +122,9 @@ body {
 
 .drop-zone {
     border: 1px dashed var(--control);
-    border-radius: var(--r-inner);
+    /* 10px внешнего радиуса минус 15px зазора — по правилу вложенности
+       собственного скругления зоне не остаётся */
+    border-radius: 0;
     padding: 22px 20px;
     text-align: center;
     cursor: pointer;
@@ -505,7 +511,7 @@ input[type="checkbox"] {
     max-width: 460px;
     background: var(--surface);
     border: 1px solid var(--border-strong);
-    border-radius: var(--r-outer);
+    border-radius: var(--r-inner);
     padding: 24px;
 }
 
