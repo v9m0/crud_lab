@@ -12,7 +12,7 @@ FileName = Annotated[
         strip_whitespace=True, min_length=1, max_length=255, pattern=r"^[^/\\\x00-\x1f]+$"
     ),
 ]
-Description = Annotated[str, StringConstraints(strip_whitespace=True, max_length=1000)]
+Description = Annotated[str, StringConstraints(strip_whitespace=True, max_length=5000)]
 
 
 class FileCreate(BaseModel):

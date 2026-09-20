@@ -2,6 +2,14 @@
 
 let records = [];
 
+// Описание может быть длинным, а всплывающая подсказка на несколько тысяч
+// символов бесполезна — обрезаем её, полный текст виден на странице записи.
+const TOOLTIP_LIMIT = 300;
+
+function tooltip(text) {
+    return text.length > TOOLTIP_LIMIT ? `${text.slice(0, TOOLTIP_LIMIT)}…` : text;
+}
+
 function setLoading(active) {
     document.getElementById('loadingFiles').style.display = active ? 'block' : 'none';
     document.getElementById('filesContent').style.display = active ? 'none' : 'block';
@@ -48,7 +56,7 @@ function renderTable(data) {
             <td class="file-name-cell">
                 <span class="file-name-text">${escapeHtml(item.filename)}</span>
                 ${item.description
-                    ? `<span class="row-hint" title="${escapeHtml(item.description)}">${escapeHtml(item.description)}</span>`
+                    ? `<span class="row-hint" title="${escapeHtml(tooltip(item.description))}">${escapeHtml(item.description)}</span>`
                     : ''}
             </td>
             <td>${item.has_content ? formatSize(item.size_bytes) : '<span class="muted">нет файла</span>'}</td>
