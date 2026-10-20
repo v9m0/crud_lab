@@ -15,7 +15,11 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+asyncpg://fileapp:fileapp@localhost:5432/filesharing"
     storage_dir: Path = BASE_DIR / "storage"
-    cors_origins: str = "http://localhost:8000"
+    cors_origins: str = "http://localhost:8000,http://localhost:5173"
+
+    # Адрес API, который клиент подставляет в запросы. Пустая строка означает
+    # «тот же источник, что и страница» — режим, когда фронтенд и API совпадают.
+    api_base_url: str = ""
 
     @property
     def cors_origin_list(self) -> list[str]:

@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `${API}/${recordId}/content`;
     });
     document.getElementById('linkBtn').addEventListener('click', async () => {
-        await navigator.clipboard.writeText(`${window.location.origin}${API}/${recordId}/content`);
+        await navigator.clipboard.writeText(apiUrl(`/${recordId}/content`));
         showMessage(
             record.is_public
                 ? 'Ссылка скопирована'

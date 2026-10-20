@@ -14,12 +14,14 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # API. Клиент живёт отдельным сервисом на другом порту, поэтому все его
+  # запросы межисточниковые — ради этого в приложении и включён CORS.
   api:
     build: .
     environment:
       DATABASE_URL: postgresql+asyncpg://fileapp:fileapp@db:5432/filesharing
       STORAGE_DIR: /data/storage
-      CORS_ORIGINS: "http://localhost:8000,http://localhost:5173"
+      CORS_ORIGINS: "http://localhost:5173"
     depends_on:
       db:
         condition: service_healthy
@@ -27,6 +29,17 @@ services:
       - "8000:8000"
     volumes:
       - storage:/data/storage
+
+  # Клиентская часть. Тот же образ, другая команда — пересборки не требует.
+  web:
+    build: .
+    command: ["uvicorn", "app.frontend:app", "--host", "0.0.0.0", "--port", "5173"]
+    environment:
+      API_BASE_URL: "http://localhost:8000"
+    depends_on:
+      - api
+    ports:
+      - "5173:5173"
 
 volumes:
   pgdata:

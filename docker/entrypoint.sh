@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
 
-echo "Ожидание базы данных..."
-python - <<'PY'
+# Образ один на оба сервиса. База нужна только API, поэтому ожидание и
+# миграции выполняются лишь там, где задан DATABASE_URL.
+if [ -n "$DATABASE_URL" ]; then
+    echo "Ожидание базы данных..."
+    python - <<'PY'
 import asyncio
 import os
 import sys
@@ -28,8 +31,11 @@ async def wait_for_db() -> None:
 asyncio.run(wait_for_db())
 PY
 
-echo "Применение миграций..."
-alembic upgrade head
+    echo "Применение миграций..."
+    alembic upgrade head
+else
+    echo "DATABASE_URL не задан — пропускаю ожидание базы и миграции"
+fi
 
-echo "Запуск приложения..."
-exec uvicorn app.main:app --host 0.0.0.0 --port 8000
+echo "Запуск..."
+exec "$@"

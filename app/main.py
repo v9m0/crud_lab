@@ -1,10 +1,10 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from app.api.errors import register_exception_handlers
-from app.api.routers import content, files, front
-from app.core.config import STATIC_DIR, get_settings
+from app.api.routers import content, files
+from app.core.config import get_settings
 
 TAGS_METADATA = [
     {
@@ -40,8 +40,11 @@ def create_app() -> FastAPI:
 
     app.include_router(files.router)
     app.include_router(content.router)
-    app.include_router(front.router)
-    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+    @app.get("/", include_in_schema=False)
+    async def root() -> RedirectResponse:
+        # На этом порту живёт только API, интерфейс отдаёт отдельный сервис
+        return RedirectResponse("/docs")
 
     @app.get("/health", include_in_schema=False)
     async def health() -> dict[str, str]:

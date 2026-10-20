@@ -1,6 +1,13 @@
 // Общие утилиты обеих страниц: списка и карточки записи.
 
-const API = '/api/files';
+// Базовый адрес API приходит из /config.js. Пустая строка означает «тот же
+// источник, что и страница»; при раздельном запуске там абсолютный адрес.
+const API = `${window.API_BASE || ''}/api/files`;
+
+// Абсолютный адрес ресурса — годится и для относительного, и для абсолютного API
+function apiUrl(path = '') {
+    return new URL(`${API}${path}`, window.location.origin).href;
+}
 const REQUEST_TIMEOUT = 30000;
 const UPLOAD_TIMEOUT = 120000;
 
