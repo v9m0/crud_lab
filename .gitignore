@@ -1,15 +1,12 @@
-# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
 venv/
 
-# Окружение и локальные данные
 .env
 storage/
 
-# IDE и ОС
 .idea/
 .vscode/
 .DS_Store

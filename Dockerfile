@@ -5,7 +5,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Зависимости отдельным слоем: правка кода не инвалидирует кэш pip
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
